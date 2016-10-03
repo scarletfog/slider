@@ -1,73 +1,80 @@
 $(function() {
-  // var carouselList = $("#carousel ul");
-  //setInterval(changeSlide, 3000); przeniesione do 60
 
+  //tu sie dziejo rzeczy
+  
+
+  var arr = $(".bullet"),
+      i = 0,
+      carouselList = $("#carousel ul");
+  
+  
   function changeSlide() {
+    
+    bgChange();
+
     carouselList.animate({
-      'marginLeft': -400
-    }, 500, moveFirstSlide);
+      marginLeft: -1000
+    }, 1000, moveFirstSlide);    
+    
   }
 
   function moveFirstSlide() {
-    var firstItem = carouselList.find("li:first");
-    var lastItem = carouselList.find("li:last");
+    
+    var firstItem = carouselList.find("li:first"),
+        lastItem = carouselList.find("li:last");
+    
     lastItem.after(firstItem);
     carouselList.css({
       marginLeft: 0
     });
+    
+  }
+  
+  function moveLastSlide() {
+    
+    var firstItem = carouselList.find("li:first"),
+        lastItem = carouselList.find("li:last");
+    
+    firstItem.before(lastItem);
+    
+    carouselList.css({
+      marginLeft: -1000
+    });
+    
   }
 
   //klikanie w arrowsy
-  $(".arrowRight").click(function() {
-    carouselList.animate({
-      marginLeft: '-400px'
-    }, 200, moveFirstSlide);
-  });
+  $(".arrowRight")
+    .click(changeSlide);
 
   $(".arrowLeft").click(function() {
+    
+    bgChange(true);
+    
+    moveLastSlide()
+    
     carouselList.animate({
-      marginLeft: '400px'
-    }, 200, moveFirstSlide);
+      marginLeft: 0
+    }, 4000);
   });
-
-  //tu sie dziejo rzeczy
-
-  var arr = [];
-  var i = 0;
-  $(".bullet").each(function() {
-    arr.push($(this));
-  });
-
-  setTimeout(bgChange, 0);
-
-  $(".arrowRight").click(function() {
-    bgChange();
-  });
-
-  $(".arrowLeft").click(function() {
-    bgChangeLeft();
-  });
-
-  function bgChange() {
-    for (var count = 0; count < arr.length; count++) {
-      if (i == count) arr[count].css('background-color', 'black');
-      else arr[count].css('background-color', 'grey');
-    }
-    i++;
-    if (i == arr.length) i = 0;
+  
+  function bgChange(isLeft) {
+    
+    i = (isLeft) ? i-1 : i+1;
+    i = i%(arr.length);
+    
+    arr.css('background-color', 'grey');
+    
+    arr
+      .eq(i)
+      .css('background-color', 'black');
+    
   }
-
-  setInterval(bgChange, 3000);
-  var carouselList = $("#carousel ul");
-  setInterval(changeSlide, 3000);
-
-  function bgChangeLeft() {
-    for (var count = arr.length - 1; count >= 0; count--) {
-      if (i == count) arr[count].css('background-color', 'black');
-      else arr[count].css('background-color', 'grey');
-    }
-    i--;
-    if (i == -1) i = arr.length - 1
-  }
+ 
+  arr
+    .eq(i)
+    .css('background-color', 'black');
+ 
+  setInterval(changeSlide, 4000);
 
 });
